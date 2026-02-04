@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _status = 'UID ativo: dev_uid_001';
+    _status = 'UID ativo: não informado';
   }
 
   @override
