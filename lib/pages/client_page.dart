@@ -1,12 +1,34 @@
+// lib/pages/client_page.dart
+
 import 'package:flutter/material.dart';
 import '../models/client.dart';
-import '../services/finance_service.01.dart';
 import '../templates/appbar.dart';
+import '../services/finance_service.dart';
+import '../tools/formatters.dart';
+import 'client_history_page.dart';
 
 class ClientPage extends StatelessWidget {
   final Client client;
 
   const ClientPage({super.key, required this.client});
+
+  Widget _line(String label, double value, {bool bold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            Formatters.currencyFormat.format(value),
+            style: TextStyle(
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,33 +98,43 @@ class ClientPage extends StatelessWidget {
                         _line('Total em compras', summary['purchases']!),
                         _line('Total pago', summary['payments']!),
                         const Divider(),
-                        _line('Saldo atual', summary['balance']!, bold: true),
+                        _line('Débito atual', summary['balance']!, bold: true),
+
+                        const SizedBox(height: 12),
+
+
                       ],
                     ),
                   ),
                 );
               },
             ),
+
+            const SizedBox(height: 16),
+
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.person_add, size: 22),
+                label: const Text('Ver histórico completo',style: TextStyle(fontSize: 18),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          ClientHistoryPage(client: client),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _line(String label, double value, {bool bold = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label),
-          Text(
-            'R\$ ${value.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-            ),
-          ),
-        ],
       ),
     );
   }
