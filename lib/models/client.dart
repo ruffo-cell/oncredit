@@ -10,4 +10,4 @@ class Client {
   factory Client.fromMap(String id, Map<String, dynamic> data) {
     return Client(id: id, name: data['name'] ?? '', cpf: data['cpf'] ?? '');
   }
-}
+}               
