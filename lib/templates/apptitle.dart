@@ -29,14 +29,14 @@ class AppTitle extends StatelessWidget {
             'ON',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.orange,
+              color: Colors.yellow,
               fontSize: 25,
             ),
           ),
           SizedBox(width: 2),
           Icon(Icons.credit_score, color: Colors.white, size: 30),
           SizedBox(width: 2),
-          Text('Credit', style: TextStyle(color: Colors.white, fontSize: 20)),
+          Text('Credit', style: TextStyle(color: Colors.yellow, fontSize: 20)),
         ],
       ),
     );

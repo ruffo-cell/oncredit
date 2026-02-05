@@ -12,7 +12,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: const Center(child: AppTitle()),
       centerTitle: true,
 
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.pink,
       foregroundColor: Colors.white,
 
       actions: [
