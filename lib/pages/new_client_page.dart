@@ -11,6 +11,11 @@ final _cpfMask = MaskTextInputFormatter(
   filter: {"#": RegExp(r'[0-9]')},
 );
 
+final phoneMask11 = MaskTextInputFormatter(
+  mask: '(##) #########',
+  filter: {'#': RegExp(r'[0-9]')},
+);
+
 class NewClientPage extends StatefulWidget {
   const NewClientPage({super.key});
 
@@ -23,7 +28,7 @@ class _NewClientPageState extends State<NewClientPage> {
   final _nameController = TextEditingController();
   final _cpfController = TextEditingController();
 
-  final List<TextEditingController> _phoneControllers = [
+  final List<TextEditingController> _phones = [
     TextEditingController(),
   ];
 
@@ -39,7 +44,7 @@ class _NewClientPageState extends State<NewClientPage> {
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final cpf = _cpfController.text.trim();
+    final cpf = _cpfController.text.replaceAll(RegExp(r'\D'), '');
 
     final exists = await _clientService.cpfExists(cpf);
 
@@ -50,8 +55,8 @@ class _NewClientPageState extends State<NewClientPage> {
       return;
     }
 
-    final phones = _phoneControllers
-        .map((c) => c.text.trim())
+    final phones = _phones
+        .map((c) => c.text.replaceAll(RegExp(r'\D'), ''))
         .where((p) => p.isNotEmpty)
         .toList();
 
@@ -105,8 +110,8 @@ class _NewClientPageState extends State<NewClientPage> {
 
               Column(
                 children: [
-                  ..._phoneControllers.map((controller) {
-                    final index = _phoneControllers.indexOf(controller);
+                  ..._phones.map((phone) {
+                    final index = _phones.indexOf(phone);
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -114,8 +119,9 @@ class _NewClientPageState extends State<NewClientPage> {
                         children: [
                           Expanded(
                             child: TextFormField(
-                              controller: controller,
+                              controller: _phones[index],
                               keyboardType: TextInputType.phone,
+                              inputFormatters: [phoneMask11],
                               decoration: InputDecoration(
                                 labelText: 'Telefone ${index + 1}',
                               ),
@@ -123,12 +129,8 @@ class _NewClientPageState extends State<NewClientPage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.remove_circle_outline),
-                            onPressed: _phoneControllers.length > 1
-                                ? () {
-                                    setState(() {
-                                      _phoneControllers.remove(controller);
-                                    });
-                                  }
+                            onPressed: _phones.length > 1
+                                ? () => setState(() => _phones.remove(phone))
                                 : null,
                           ),
                         ],
@@ -143,7 +145,7 @@ class _NewClientPageState extends State<NewClientPage> {
                       label: const Text('Adicionar telefone'),
                       onPressed: () {
                         setState(() {
-                          _phoneControllers.add(TextEditingController());
+                          _phones.add(TextEditingController());
                         });
                       },
                     ),

@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                     return ListTile(
                       leading: const CircleAvatar(child: Icon(Icons.person)),
                       title: Text(client.name),
-                      subtitle: Text(client.cpf),
+                      subtitle: Text('CPF: ${client.formattedCpf}'),
                       onTap: () {
                         Navigator.push(
                           context,
