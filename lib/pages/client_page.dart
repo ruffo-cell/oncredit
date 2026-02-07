@@ -25,7 +25,7 @@ class ClientPage extends StatefulWidget {
 class _ClientPageState extends State<ClientPage> {
   @override
   Widget build(BuildContext context) {
-    final client = widget.client; // 👈 atalho elegante
+    final client = widget.client;
 
     return Scaffold(
       appBar: MyAppBar(),
@@ -193,7 +193,6 @@ class _ClientPageState extends State<ClientPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // indicador visual (UX 💎)
                   Container(
                     width: 40,
                     height: 4,

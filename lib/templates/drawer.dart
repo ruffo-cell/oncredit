@@ -11,7 +11,6 @@ class MyDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         children: [
-          // --- Cabeçalho compacto ---
           Container(
             width: double.infinity,
             height: 100,
@@ -33,7 +32,6 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
 
-          // --- Menu (scrollável) ---
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
@@ -66,7 +64,6 @@ class MyDrawer extends StatelessWidget {
             ),
           ),
 
-          // --- Rodapé ---
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 12),

@@ -31,7 +31,6 @@ class ClientHistoryPage extends StatelessWidget {
 
             const SizedBox(height: 22),
 
-            // --- Identificação do cliente (igual ClientPage) ---
             Text(
               client.name,
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -41,7 +40,6 @@ class ClientHistoryPage extends StatelessWidget {
             const SizedBox(height: 16),
             const Divider(),
 
-            // --- Histórico ---
             Expanded(
               child: FutureBuilder<List<FinancialEvent>>(
                 future: FinanceService().getClientHistory(client.id),

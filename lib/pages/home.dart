@@ -46,7 +46,6 @@ class _HomePageState extends State<HomePage> {
       appBar: MyAppBar(),
       body: Column(
         children: [
-          // OPCIONAL: Identificação da base de dados (Uid)
           Align(
             alignment: Alignment.centerRight,
             heightFactor: 1,
@@ -56,7 +55,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // --- Saldo ---
           FutureBuilder<double>(
             future: _financeService.getTotalBalance(),
             builder: (context, snapshot) {
@@ -98,12 +96,10 @@ class _HomePageState extends State<HomePage> {
 
           const SizedBox(height: 8),
 
-          // --- Busca ---
           _buildSearchField(),
 
           const SizedBox(height: 8),
 
-          // --- Lista de clientes ---
           Expanded(
             child: FutureBuilder<List<Client>>(
               future: _clientsFuture,
@@ -144,7 +140,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          // Novo cliente
           Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
@@ -166,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                   });
 
                   if (created == true) {
-                    setState(() {}); // força rebuild e recarrega a lista
+                    setState(() {});
                   }
                 },
                 style: ElevatedButton.styleFrom(

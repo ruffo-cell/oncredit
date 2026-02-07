@@ -113,7 +113,7 @@ class FinanceService {
       }
     }
 
-    history.sort((a, b) => b.date.compareTo(a.date)); // mais recente primeiro
+    history.sort((a, b) => b.date.compareTo(a.date));
 
     return history;
   }
