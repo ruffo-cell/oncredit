@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import '../models/client.dart';
+import '../services/client_service.dart';
 import '../templates/appbar.dart';
 import '../services/finance_service.dart';
 import '../tools/formatters.dart';
+import 'client_edit_page.dart';
 import 'client_history_page.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,9 +25,18 @@ class ClientPage extends StatefulWidget {
 }
 
 class _ClientPageState extends State<ClientPage> {
+
+  late Client _client;
+
+  @override
+  void initState() {
+    super.initState();
+    _client = widget.client;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final client = widget.client;
+    final client = _client;
 
     return Scaffold(
       appBar: MyAppBar(),
@@ -129,7 +140,7 @@ class _ClientPageState extends State<ClientPage> {
   }
 
   Widget _buildBottomActions(BuildContext context) {
-    final client = widget.client;
+    final client = _client;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -153,9 +164,47 @@ class _ClientPageState extends State<ClientPage> {
             child: ElevatedButton.icon(
               icon: const Icon(Icons.edit),
               label: const Text('Editar'),
-              onPressed: () {
-                debugPrint('Mostrar popup de confirmação');
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (_) =>
+                      AlertDialog(
+                        title: const Text('Editar cliente'),
+                        content: const Text(
+                          'As alterações feitas não poderão ser desfeitas.\n\nDeseja continuar?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: const Text('Cancelar'),
+                          ),
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: const Text('Continuar'),
+                          ),
+                        ],
+                      ),
+                );
+
+                if (confirmed == true) {
+                  final updated = await Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ClientEditPage(client: client),
+                    ),
+                  );
+
+                  if (updated == true && mounted) {
+                    await _reloadClient();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Cliente atualizado com sucesso'),
+                      ),
+                    );
+                  }
+                }
               },
+
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepOrange,
                 foregroundColor: Colors.white,
@@ -168,14 +217,17 @@ class _ClientPageState extends State<ClientPage> {
   }
 
   void _showContactsBottomSheet() {
-    final phones = widget.client.phones;
+    final phones = _client.phones;
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) {
-        final screenWidth = MediaQuery.of(context).size.width;
+        final screenWidth = MediaQuery
+            .of(context)
+            .size
+            .width;
         final maxWidth = screenWidth * 0.9;
 
         return Center(
@@ -187,7 +239,9 @@ class _ClientPageState extends State<ClientPage> {
               margin: const EdgeInsets.only(bottom: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: Theme
+                    .of(context)
+                    .scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -216,7 +270,8 @@ class _ClientPageState extends State<ClientPage> {
                       title: Text(phone),
                       trailing: PopupMenuButton<String>(
                         onSelected: (value) => _handlePhoneAction(value, phone),
-                        itemBuilder: (_) => const [
+                        itemBuilder: (_) =>
+                        const [
                           PopupMenuItem(
                             value: 'copy',
                             child: Text('Copiar número'),
@@ -272,22 +327,38 @@ class _ClientPageState extends State<ClientPage> {
         break;
     }
   }
-}
 
-Widget _line(String label, double value, {bool bold = false}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(label),
-        Text(
-          Formatters.currencyFormat.format(value),
-          style: TextStyle(
-            fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+
+  Widget _line(String label, double value, {bool bold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label),
+          Text(
+            Formatters.currencyFormat.format(value),
+            style: TextStyle(
+              fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+        ],
+      ),
+    );
+  }
+
+  Future<void> _reloadClient() async {
+    final service = ClientService();
+    final clients = await service.getClients();
+
+    final updated = clients.firstWhere(
+          (c) => c.id == _client.id,
+      orElse: () => _client,
+    );
+
+    setState(() {
+      _client = updated;
+    });
+  }
+
 }
