@@ -1,6 +1,7 @@
 // lib/pages/client_edit_page.dart
 
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:oncredit/templates/appbar.dart';
 import '../models/client.dart';
 import '../services/client_service.dart';
@@ -9,6 +10,20 @@ import '../widgets/client_form.dart';
 import 'client_page.dart';
 
 enum ClientEditResult { updated, deleted }
+
+String formatPhone(String value) {
+  final formatter = MaskTextInputFormatter(
+    mask: '(##) #########',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
+
+  formatter.formatEditUpdate(
+    const TextEditingValue(),
+    TextEditingValue(text: value),
+  );
+
+  return formatter.getMaskedText();
+}
 
 class ClientEditPage extends StatefulWidget {
   final Client client;
@@ -33,7 +48,7 @@ class _ClientEditPageState extends State<ClientEditPage> {
     _nameController = TextEditingController(text: widget.client.name);
     _cpfController = TextEditingController(text: widget.client.formattedCpf);
     _phones = widget.client.phones
-        .map((p) => TextEditingController(text: p))
+        .map((p) => TextEditingController(text: formatPhone(p)))
         .toList();
   }
 
@@ -174,5 +189,4 @@ class _ClientEditPageState extends State<ClientEditPage> {
 
     Navigator.pop(context, ClientEditResult.deleted);
   }
-
 }
