@@ -146,8 +146,8 @@ class _ClientEditPageState extends State<ClientEditPage> {
           children: [
             Text(
               'Tem certeza que deseja apagar ${widget.client.name}?\n\n'
-              'Essa ação apagará todo o histórico financeiro.\n\n'
-              'Digite APAGAR para confirmar.',
+                  'Essa ação apagará todo o histórico financeiro.\n\n'
+                  'Digite APAGAR para confirmar.',
             ),
             const SizedBox(height: 12),
             TextField(controller: controller),
