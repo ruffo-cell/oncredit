@@ -2,15 +2,23 @@
 
 Aplicativo Dart & Flutter para controle de pgamentos fiados.
 
-## Getting Started
+Uma versão Web funcional do aplicativo está disonível em:
 
-This project is a starting point for a Flutter application.
+|[`https://luferat.github.io/oncredit/`](https://luferat.github.io/oncredit/)|
+|---|
+| _Mantenha <kbd>Ctrl</kbd> pressionado ao clicar no link._ |
 
-A few resources to get you started if this is your first Flutter project:
+Um APK (Android) para testes está disponível em:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+|[`oncredit.2026.01.001+1.apk`](https://luferat.github.io/oncredit/apk/oncredit.2026.01.001+1.apk)|
+|---|
+| _Mantenha <kbd>Ctrl</kbd> pressionado ao clicar no link._ |
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+O tutorial de criação do aplicativo está disponível em:
+
+| [`https://lufer.clic/flutter/oncredit`](https://lufer.clic/flutter/oncredit) |
+|------------------------------------------------------------------------------------------|
+| _Mantenha <kbd>Ctrl</kbd> pressionado ao clicar no link._                                |
+
+
+---
