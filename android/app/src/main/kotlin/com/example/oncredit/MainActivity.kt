@@ -1,4 +1,4 @@
-package net.luferat.oncredit
+package com.example.oncredit
 
 import io.flutter.embedding.android.FlutterActivity
 
